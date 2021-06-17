@@ -1,88 +1,70 @@
 import React, {Component} from 'react'
 
 class Formu extends Component {
-  componentDidMount = async () => {
-    const response = await fetch('http://localhost:5000/meeting' , {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: 'React POST' })
-  });
-    const result = await response.json();
-    this.setState(result);
-  }
   
     constructor(props) {
       super(props);
       this.state = {
-        Name: '',
-        Start_hour: '',
-        End_hour: '',
-        Topic: '',
-        Link: '',
+        start_hour: "",
+        end_hour: "",
+        topic: "",
+        link: "",
       }
-  
-      this.handleChange = this.handleChange.bind(this);
+
       this.handleSubmit = this.handleSubmit.bind(this);
     }
-  
-    handleChange(e) {
-      const n = e.target.name
-      this.setState({
-        [n]: e.target.value
-      })
-    }
 
-    handleSubmit (e) {
-      e.preventDefault()
-      const data = JSON.stringify(this.state)
-      this.setState({
-        Name: '',
-        Start_hour: '',
-        End_hour: '',
-        Topic: '',
-        Link: '',
-      })
-    }
+    handleSubmit(event){ 
+      event.preventDefault();
+      const PostDataAsync = async ()=>{
+       var response =  await fetch ('http://localhost:5000/meeting', {
+       method: 'post',
+       headers: {'Content-Type':'application/json'},
+       body: JSON.stringify({
+        "start_hour" : this.start_hour.value,
+        "end_hour" : this.end_hour.value,
+        "topic" : this.topic.value,
+        "link" : this.link.value
+       })
+       })
+       const result = await response.json();
+       this.setState(result);
+     }
+     PostDataAsync();
+      };
   
     render() {
       return (
         <div>
           <h1>Meetings : </h1>
           
-          <form method="POST">
+          <form method="POST" onSubmit={this.handleSubmit}>
 
           <div>
-            <label htmlFor="name">Name </label>
-            <input type="text" value={this.state.name} onChange={this.handleChange} id="name" name="Name"/><br></br><br></br>
-          </div>
-
-          <div>
-            <label htmlFor="start_hour">Start hour </label>
-            <input type="text" value={this.state.start_hour} onChange={this.handleChange} id="start_hour" name="Start_hour"/><br></br><br></br>
+            <label htmlFor="start_hour">Start hour </label><br></br>
+            <input class="formulaire" ref={(ref) => {this.start_hour = ref}} type="text" value={this.state.start_hour} onChange={(ev)=>this.setState({start_hour:ev.target.value})} id="start_hour" name="start_hour"/><br></br><br></br>
           </div>
           
           <div>
-            <label htmlFor="end_hour">End hour </label>
-            <input type="text" value={this.state.end_hour} onChange={this.handleChange} id="end_hour" name="End_hour"/><br></br><br></br>
+            <label htmlFor="end_hour">End hour </label><br></br>
+            <input class="formulaire" ref={(ref) => {this.end_hour = ref}} type="text" value={this.state.end_hour} onChange={(ev)=>this.setState({end_hour:ev.target.value})} id="end_hour" name="end_hour"/><br></br><br></br>
           </div>
 
           <div>
-            <label htmlFor="topic">Topic </label>
-            <input type="text" value={this.state.topic} onChange={this.handleChange} id="topic" name="Topic"/><br></br><br></br>
+            <label htmlFor="topic">Topic </label><br></br>
+            <input class="formulaire" ref={(ref) => {this.topic = ref}} type="text" value={this.state.topic} onChange={(ev)=>this.setState({topic:ev.target.value})} id="topic" name="topic"/><br></br><br></br>
           </div>
 
           <div>
-            <label htmlFor="link">Link </label>
-            <input type="text" value={this.state.link} onChange={this.handleChange} id="link" name="Link"/><br></br><br></br>
+            <label htmlFor="link">Link </label><br></br>
+            <input class="formulaire" ref={(ref) => {this.link = ref}} type="text" value={this.state.link} onChange={(ev)=>this.setState({link:ev.target.value})} id="link" name="link"/><br></br><br></br>
           </div>
-          
+            
+            <button type="Submit">send</button>
           </form>
-
-          <div action="{{url_for('get_all_meetings')}}" method="get">
-            <input type="submit" value="save" />
-          </div>
+          <br></br>
           
-          {JSON.stringify(this.state)}
+          formulaire : {JSON.stringify(this.state)}
         </div>
       )
     }

@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
+import Form from './Formulaire';
 
-const Table1 = () => {
+
+const TableHeader = () => {
     return (
         <thead>
             <tr>
@@ -9,29 +11,39 @@ const Table1 = () => {
                 <th>End hour</th>
                 <th>Topic</th>
                 <th>Link</th>
+                <th></th>
             </tr>
         </thead>
     )
 }
 
-const Table3 = ({props}) => (
-    <tbody>{props?.map((row, index) => {
+const TableBody = ({props}) => (
+    <tbody>{props?.map((index) => {
         console.log(props);
         return (
-            <tr key={row._id}>
-                <td>{row._id}</td>
-                <td>{row.start_hour}</td>
-                <td>{row.end_hour}</td>
-                <td>{row.topic}</td>
-                <td>{row.link}</td>
-            </tr>
+                <tr key={_id}>
+                    <td>{_id}</td>
+                    <td>{start_hour}</td>
+                    <td>{end_hour}</td>
+                    <td>{topic}</td>
+                    <td>{link}</td>
+
+                    <button type="submit" onClick={() => {DeleteMeeting_by_id(_id) }}>Delete</button>
+                </tr>
         )
     })}
     </tbody>
+
 )
 
-class Table extends Component {
+function DeleteMeeting_by_id(id){
+    console.log(id)
+    fetch('http://localhost:5000/meeting/'+id, { method: 'DELETE' })
+}
 
+
+
+class Table extends Component {
     render() {
         const {resultData} = this.props;
         console.log(this.props.resultData);
@@ -39,9 +51,19 @@ class Table extends Component {
             <body>
                 <h1>Meetings : </h1><br></br>
                 <table>
-                    <Table1/>
-                    <Table3 props={resultData} />
-           </table>
+                    <TableHeader/>
+                    <TableBody props={resultData} />
+                </table>
+                
+                <br></br><br></br>
+                <hr></hr>
+                <br></br><br></br>
+                
+                <center>
+                    <Form />
+                </center>
+
+                <br></br>
             </body>
         )
     }
